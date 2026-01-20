@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <setting name="logImpl" value="LOG4J2"/>
+        <setting name="lazyLoadingEnabled" value="true"/>
+        <setting name="aggressiveLazyLoading" value="false"/>
+    </settings>
+    <environments default="sqlite">
+        <environment id="mysql">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://127.0.0.1:3306/mybatis"/>
+                <property name="username" value="root"/>
+                <property name="password" value="Buttonikid1!"/>
+            </dataSource>
+        </environment>
+        <environment id="sqlite">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="org.sqlite.JDBC"/>
+                <property name="url" value="jdbc:sqlite:rss.db"/>
+                <property name="username" value=""/>
+                <property name="password" value=""/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <!--
+        <mapper resource="ArticleMapper.xml"/>
+        <mapper resource="UserMapper.xml"/>
+
+        <mapper resource="EmployeeMapper.xml"/>
+        -->
+        <mapper class="com.neo4work.rssreader.mapper.itemMapper"/>
+        <mapper class="com.neo4work.rssreader.mapper.feedMapper"/>
+        <mapper class="com.neo4work.rssreader.mapper.userMapper"/>
+        <mapper class="com.neo4work.rssreader.mapper.isReadMapper"/>
+    </mappers>
+
+</configuration>
