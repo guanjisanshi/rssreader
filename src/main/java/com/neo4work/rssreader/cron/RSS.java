@@ -168,7 +168,7 @@ public class RSS
                     {
                         descriptionList=doc.selectNodes(xpathcontent[i]);
                     }
-                    if(contentList.size()!=descriptionList.size())
+                    if(contentList.size()<descriptionList.size())
                     {
                         contentList=descriptionList;
                     }
