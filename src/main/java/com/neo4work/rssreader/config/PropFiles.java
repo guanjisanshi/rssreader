@@ -61,6 +61,6 @@ public class PropFiles
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return propertiesFiles;
+        return propertiesFileString;
     }
 }

@@ -34,7 +34,7 @@ public class JSON
         if (url.split("2").length > 2)
         {
             host = url.split("/")[2];
-            List<File> propFileList;
+            List<String> propFileList;
             Map<String, String> map = new HashMap<>();
 
             Properties prop = new Properties();
