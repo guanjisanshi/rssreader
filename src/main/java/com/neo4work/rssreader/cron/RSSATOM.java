@@ -1,6 +1,7 @@
 package com.neo4work.rssreader.cron;
 
 
+import com.neo4work.rssreader.config.PropFiles;
 import com.neo4work.rssreader.db.dbFeedCommit;
 import com.neo4work.rssreader.db.dbItemCommit;
 import com.neo4work.rssreader.entity.Feed;
@@ -21,17 +22,17 @@ import java.util.*;
 
 //https://www.stats.gov.cn/sj/zxfb/rss.xml
 //https://www.stats.gov.cn/sj/sjjd/rss.xml
-public class RSSATOMType
+public class RSSATOM
 {
-    private static final Logger log = LogManager.getLogger(RSSATOMType.class);
+    private static final Logger log = LogManager.getLogger(RSSATOM.class);
 
     public static boolean isRSSATOM(String content)
     {
 
         if (XML.isXML(content))
         {
-            Document doc = null;
-            String rootName = null;
+            Document doc ;
+            String rootName ;
 
             try
             {
@@ -62,25 +63,50 @@ public class RSSATOMType
     private Map<String, String> feedProperties(String url, String type)
     {
         //TODO
-        String host = null;
-        if (url.split("2").length > 2)
+        String host;
+        if(url.split("2").length>2)
         {
-            System.out.println(url.split("/")[2]);
-            host = url.split("/")[2];
+            host=url.split("/")[2];
 
-            //InputStream inputHost =Paths.get(ClassLoader.getSystemResource(host+".properties").toURI());
-            //if(inputHost!=null)
+            List<String> propFileList;
+            Map<String, String> map = new HashMap<>();
+
+            Properties prop = new Properties();
+
+            propFileList= PropFiles.getPropFiles();
+            if(!propFileList.isEmpty() && propFileList.contains(host+"rssatom.properties"))
             {
+                try(InputStream input = Files.newInputStream(Paths.get(ClassLoader.getSystemResource(host+"rssatom.properties").toURI())))
+                {
+                    prop.load(input);
+                    String root=prop.getProperty("root");
+                    map.put("root",root);
+                    String title=prop.getProperty("title");
+                    map.put("title",title);
+                    String item=prop.getProperty("item");
+                    map.put("item",item);
+                    String subtitle=prop.getProperty("subtitle");
+                    map.put("subtitle",subtitle);
+                    String pubTime=prop.getProperty("pubTime");
+                    map.put("pubTime",pubTime);
+                    String content=prop.getProperty("content");
+                    map.put("content",content);
+                    String link=prop.getProperty("link");
+                    map.put("link",link);
 
+                }
+                catch (IOException e)
+                {
+                    log.error(e);
+                }
+                catch (URISyntaxException e)
+                {
+                    log.error(e);
+                }
+                return map;
             }
-
         }
 
-
-        if (url.contains(""))
-        {
-
-        }
         Map<String, String> map = new HashMap<>();
 
         String filename = null;
@@ -120,10 +146,10 @@ public class RSSATOMType
 
     public static void parseXML(String url, String result, String type)
     {
-        Map<String, String> map = new HashMap<>();
+        Map<String, String> map;
         List<Item> ItemList = new ArrayList<>();
-        map = new RSSATOMType().feedProperties(url, "rss");
-        Document doc = null;
+        map = new RSSATOM().feedProperties(url, "rss");
+        Document doc;
         try
         {
             doc = DocumentHelper.parseText(result);
@@ -140,7 +166,7 @@ public class RSSATOMType
                         && subtitleList.size() == pubtimeList.size()
                         && pubtimeList.size() == contentList.size()
                         && contentList.size() == linkList.size()
-                        && itemList.size() != 0)
+                        && !itemList.isEmpty())
                 {
                     for (int i = 0; i < itemList.size(); i++)
                     {

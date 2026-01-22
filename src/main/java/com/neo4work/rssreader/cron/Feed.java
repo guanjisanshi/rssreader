@@ -24,21 +24,21 @@ public class Feed
     public static void addFeed(String feed_url)
     {
         String result=http.get(feed_url);
-        if(JSONType.isJSON(result))
+        if(JSON.isJSON(result))
         {
-            JSONType.parseJSON(feed_url,result,"description");
+            JSON.parseJSON(feed_url,result,"description");
         }
-        if(ATOMType.isATOM(result))
+        if(ATOM.isATOM(result))
         {
-            ATOMType.parseXML(feed_url,result,"description");
+            ATOM.parseXML(feed_url,result,"description");
         }
-        if(RSSType.isRSS(result))
+        if(RSS.isRSS(result))
         {
-            RSSType.parseXML(feed_url,result,"description");
+            RSS.parseXML(feed_url,result,"description");
         }
-        if(RSSATOMType.isRSSATOM(result))
+        if(RSSATOM.isRSSATOM(result))
         {
-            RSSATOMType.parseXML(feed_url,result,"description");
+            RSSATOM.parseXML(feed_url,result,"description");
         }
     }
 }

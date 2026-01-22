@@ -1,6 +1,6 @@
 package com.neo4work.rssreader.cron;
-import com.alibaba.fastjson2.JSON;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -10,6 +10,7 @@ import java.util.*;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONPath;
+import com.neo4work.rssreader.config.PropFiles;
 import com.neo4work.rssreader.db.dbFeedCommit;
 import com.neo4work.rssreader.db.dbItemCommit;
 import com.neo4work.rssreader.entity.Feed;
@@ -17,23 +18,59 @@ import com.neo4work.rssreader.entity.Item;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class JSONType
+public class JSON
 {
-    private static final Log log = LogFactory.getLog(JSONType.class);
+    private static final Log log = LogFactory.getLog(JSON.class);
 
     public static boolean isJSON(String content)
     {
 
-        if(JSON.isValid(content))
-            return true;
-        else
-            return false;
+        return com.alibaba.fastjson2.JSON.isValid(content);
     }
     private Map<String, String> feedProperties(String url, String type)
     {
         //TODO
-        if(url.contains(""))
+        String host ;
+        if (url.split("2").length > 2)
         {
+            host = url.split("/")[2];
+            List<File> propFileList;
+            Map<String, String> map = new HashMap<>();
+
+            Properties prop = new Properties();
+
+            propFileList = PropFiles.getPropFiles();
+            if (!propFileList.isEmpty() && propFileList.contains(host+"json.properties"))
+            {
+                try (InputStream input = Files.newInputStream(Paths.get(ClassLoader.getSystemResource(host + "json.properties").toURI())))
+                {
+                    prop.load(input);
+                    String root = prop.getProperty("root");
+                    map.put("root", root);
+                    String title = prop.getProperty("title");
+                    map.put("title", title);
+                    String item = prop.getProperty("item");
+                    map.put("item", item);
+                    String subtitle = prop.getProperty("subtitle");
+                    map.put("subtitle", subtitle);
+                    String pubTime = prop.getProperty("pubTime");
+                    map.put("pubTime", pubTime);
+                    String content = prop.getProperty("content");
+                    map.put("content", content);
+                    String link = prop.getProperty("link");
+                    map.put("link", link);
+
+                }
+                catch (IOException e)
+                {
+                    log.error(e);
+                }
+                catch (URISyntaxException e)
+                {
+                    log.error(e);
+                }
+                return map;
+            }
 
         }
         Map<String, String> map = new HashMap<>();
@@ -79,10 +116,10 @@ public class JSONType
     {
         Map <String,String> map=new HashMap<>();
         List<Item> ItemList=new ArrayList<>();
-        map=new JSONType().feedProperties(url,"json");
+        map=new JSON().feedProperties(url,"json");
         try
         {
-            JSONObject JOB=JSON.parseObject(result);
+            JSONObject JOB= com.alibaba.fastjson2.JSON.parseObject(result);
             Object title= JSONPath.eval(JOB,map.get("title"));
             //System.out.println(title);
 

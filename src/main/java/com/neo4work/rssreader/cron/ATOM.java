@@ -1,5 +1,6 @@
 package com.neo4work.rssreader.cron;
 
+import com.neo4work.rssreader.config.PropFiles;
 import com.neo4work.rssreader.db.dbFeedCommit;
 import com.neo4work.rssreader.db.dbItemCommit;
 import com.neo4work.rssreader.entity.Feed;
@@ -15,16 +16,16 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 
-public class ATOMType
+public class ATOM
 {
-    private static final Log log = LogFactory.getLog(ATOMType.class);
+    private static final Log log = LogFactory.getLog(ATOM.class);
 
     public static boolean isATOM(String content)
     {
         if(XML.isXML(content))
         {
-            Document doc = null;
-            String rootName = null;
+            Document doc ;
+            String rootName ;
             try
             {
                 doc= DocumentHelper.parseText(content);
@@ -45,8 +46,47 @@ public class ATOMType
     private Map<String, String> feedProperties(String url, String type)
     {
         //TODO
-        if(url.contains(""))
+        String host;
+        if (url.split("2").length > 2)
         {
+            host = url.split("/")[2];
+            List<String> propFileList ;
+            Map<String, String> map = new HashMap<>();
+
+            Properties prop = new Properties();
+
+            propFileList = PropFiles.getPropFiles();
+            if (!propFileList.isEmpty() && propFileList.contains(host + "atom.properties"))
+            {
+                try (InputStream input = Files.newInputStream(Paths.get(ClassLoader.getSystemResource(host + "atom.properties").toURI())))
+                {
+                    prop.load(input);
+                    String root = prop.getProperty("root");
+                    map.put("root", root);
+                    String title = prop.getProperty("title");
+                    map.put("title", title);
+                    String item = prop.getProperty("item");
+                    map.put("item", item);
+                    String subtitle = prop.getProperty("subtitle");
+                    map.put("subtitle", subtitle);
+                    String pubTime = prop.getProperty("pubTime");
+                    map.put("pubTime", pubTime);
+                    String content = prop.getProperty("content");
+                    map.put("content", content);
+                    String link = prop.getProperty("link");
+                    map.put("link", link);
+
+                }
+                catch (IOException e)
+                {
+                    log.error(e);
+                }
+                catch (URISyntaxException e)
+                {
+                    log.error(e);
+                }
+                return map;
+            }
 
         }
         Map<String, String> map = new HashMap<>();
@@ -94,7 +134,7 @@ public class ATOMType
         Map <String,String> map=new HashMap<>();
         List<Item> ItemList=new ArrayList<>();
 
-        map=new ATOMType().feedProperties(url,"atom");
+        map=new ATOM().feedProperties(url,"atom");
         Document doc=null;
         try
         {

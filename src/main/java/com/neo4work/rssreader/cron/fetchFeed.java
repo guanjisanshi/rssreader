@@ -17,21 +17,21 @@ public class fetchFeed {
         //String url="https://www.stats.gov.cn/sj/zxfb/rss.xml";
         String result = http.get(url);
         //System.out.println(result);
-        if(RSSType.isRSS(result))
+        if(RSS.isRSS(result))
         {
-            RSSType.parseXML(url,result,"content");
+            RSS.parseXML(url,result,"content");
         }
-        if(ATOMType.isATOM(result))
+        if(ATOM.isATOM(result))
         {
-            ATOMType.parseXML(url,result,"content");
+            ATOM.parseXML(url,result,"content");
         }
-        if(JSONType.isJSON(result))
+        if(JSON.isJSON(result))
         {
-            JSONType.parseJSON(url,result,"content");
+            JSON.parseJSON(url,result,"content");
         }
-        if(RSSATOMType.isRSSATOM(result))
+        if(RSSATOM.isRSSATOM(result))
         {
-            RSSATOMType.parseXML(url,result,"content");
+            RSSATOM.parseXML(url,result,"content");
         }
 
     }
