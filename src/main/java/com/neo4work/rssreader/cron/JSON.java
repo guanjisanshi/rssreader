@@ -100,7 +100,7 @@ public class JSON
         }
         return map;
     }
-    public static void parseJSON(String url,String result,String type)
+    public static int parseJSON(String url,String result,String type)
     {
         Map <String,String> map;
         List<Item> ItemList=new ArrayList<>();
@@ -143,6 +143,7 @@ public class JSON
                         }
                         int resultcode= dbItemCommit.doCommit(ItemList);
                         System.out.println(resultcode);
+                        return resultcode;
                     }
                 }
                 if("description".equals(type))
@@ -150,6 +151,7 @@ public class JSON
                     Feed feed=new Feed((String)title,url);
                     int resultcode= dbFeedCommit.doCommit(feed);
                     System.out.println(resultcode);
+                    return resultcode;
                 }
 
 
@@ -161,6 +163,6 @@ public class JSON
         {
             log.error(e);
         }
-
+        return -1;
     }
 }

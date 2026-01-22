@@ -14,6 +14,7 @@ public class Feed
         urls.add("https://www.thisiscolossal.com/feed/");
         urls.add("https://jvns.ca/atom.xml");
         urls.add("https://furbo.org/feed/json");
+        urls.add("https://feeds.allenpike.com/feed/");
         for(int i=0;i<urls.size();i++)
         {
             Feed.addFeed(urls.get(i));
@@ -21,24 +22,30 @@ public class Feed
 
     }
 
-    public static void addFeed(String feed_url)
+    public static int addFeed(String feed_url)
     {
+        int resultcode;
         String result=http.get(feed_url);
         if(JSON.isJSON(result))
         {
-            JSON.parseJSON(feed_url,result,"description");
+            resultcode=JSON.parseJSON(feed_url,result,"description");
+            return resultcode;
         }
         if(ATOM.isATOM(result))
         {
-            ATOM.parseXML(feed_url,result,"description");
+            resultcode=ATOM.parseXML(feed_url,result,"description");
+            return resultcode;
         }
         if(RSS.isRSS(result))
         {
-            RSS.parseXML(feed_url,result,"description");
+            resultcode=RSS.parseXML(feed_url,result,"description");
+            return resultcode;
         }
         if(RSSATOM.isRSSATOM(result))
         {
-            RSSATOM.parseXML(feed_url,result,"description");
+            resultcode=RSSATOM.parseXML(feed_url,result,"description");
+            return resultcode;
         }
+        return -1;
     }
 }

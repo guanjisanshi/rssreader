@@ -13,7 +13,7 @@ public class dbIsReadCommit {
     public static int doCommit(IsRead isRead) {
         SqlSession sqlSession = null;
         try {
-            sqlSession = neoSqlSessionFactory.getSqlSession();
+            sqlSession = neoSqlSessionFactory.getSqlSession(true);
             isReadMapper isReadMapper = sqlSession.getMapper(isReadMapper.class);
             int count = isReadMapper.insertIsRead(isRead);
             sqlSession.commit();
@@ -33,7 +33,7 @@ public class dbIsReadCommit {
     public static int doUpdate(IsRead isRead) {
         SqlSession sqlSession = null;
         try {
-            sqlSession = neoSqlSessionFactory.getSqlSession();
+            sqlSession = neoSqlSessionFactory.getSqlSession(true);
             isReadMapper isReadMapper = sqlSession.getMapper(isReadMapper.class);
             int count = isReadMapper.updateIsRead(isRead);
             sqlSession.commit();

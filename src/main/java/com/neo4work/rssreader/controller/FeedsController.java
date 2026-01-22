@@ -98,19 +98,34 @@ public class FeedsController {
 
     // 添加RSS源
     @PostMapping
-    public ResponseEntity<Feed> addFeed(@RequestBody Feed feed) {
+    public ResponseEntity<Feed> addFeed(@RequestBody java.util.Map<String, String> requestBody) {
         try {
+            // 从JSON请求体中提取URL
+            String url = requestBody.get("url");
+            if (url == null || url.isEmpty()) {
+                return ResponseEntity.badRequest().body(null);
+            }
+            
             // 检查URL是否已经存在
-            Feed existingFeed = dbFeedGet.doGetByUrl(feed.getUrl());
+            Feed existingFeed = dbFeedGet.doGetByUrl(url);
             if (existingFeed != null) {
                 return ResponseEntity.badRequest().body(null);
             }
             
             // 保存到数据库
-            int result = dbFeedCommit.doCommit(feed);
-            if (result > 0) {
-                return ResponseEntity.ok(feed);
+            int resultcode=com.neo4work.rssreader.cron.Feed.addFeed(url);
+
+            if (resultcode > 0) {
+                // 如果Feed.addFeed返回正数，说明添加成功
+                Feed newlyAddedFeed = dbFeedGet.doGetByUrl(url);
+                if (newlyAddedFeed != null) {
+                    return ResponseEntity.ok(newlyAddedFeed);
+                } else {
+                    // 理论上不会走到这里，因为Feed.addFeed返回正数意味着添加成功
+                    return ResponseEntity.status(500).body(null);
+                }
             } else {
+                // 如果Feed.addFeed返回负数，说明添加失败
                 return ResponseEntity.status(500).body(null);
             }
         } catch (Exception e) {

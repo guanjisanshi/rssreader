@@ -13,7 +13,7 @@ public class dbUserGet {
     public static User doGetByUsername(String username) {
         SqlSession sqlSession = null;
         try {
-            sqlSession = neoSqlSessionFactory.getSqlSession();
+            sqlSession = neoSqlSessionFactory.getSqlSession(true);
             userMapper userMapper = sqlSession.getMapper(userMapper.class);
             User user = userMapper.selectUserByUsername(username);
             return user;

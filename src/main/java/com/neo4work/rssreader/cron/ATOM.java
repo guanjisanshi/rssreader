@@ -119,7 +119,7 @@ public class ATOM
         }
         return map;
     }
-    public static void parseXML(String url,String result,String type)
+    public static int parseXML(String url,String result,String type)
     {
         Map <String,String> map;
         List<Item> ItemList=new ArrayList<>();
@@ -181,7 +181,8 @@ public class ATOM
                         ItemList.add(Item);
                     }
                     int resultcode= dbItemCommit.doCommit(ItemList);
-                    System.out.println(resultcode);
+                    //System.out.println(resultcode);
+                    return resultcode;
                 }
 
             }
@@ -189,7 +190,8 @@ public class ATOM
             {
                 Feed feed=new Feed(titleString,url);
                 int resultcode= dbFeedCommit.doCommit(feed);
-                System.out.println(resultcode);
+                //System.out.println(resultcode);
+                return resultcode;
             }
 
         }
@@ -197,6 +199,6 @@ public class ATOM
         {
             log.error(e);
         }
-
+        return -1;
     }
 }

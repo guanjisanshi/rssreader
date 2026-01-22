@@ -13,7 +13,7 @@ public class dbIsReadGet {
     public static IsRead doGetByUserIdAndItemLink(String userIdCode, String itemLink) {
         SqlSession sqlSession = null;
         try {
-            sqlSession = neoSqlSessionFactory.getSqlSession();
+            sqlSession = neoSqlSessionFactory.getSqlSession(true);
             isReadMapper isReadMapper = sqlSession.getMapper(isReadMapper.class);
             IsRead isRead = isReadMapper.selectIsReadByUserIdAndItemLink(userIdCode, itemLink);
             return isRead;

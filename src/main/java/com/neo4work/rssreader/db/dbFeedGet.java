@@ -17,7 +17,7 @@ public class dbFeedGet
         SqlSession sqlSession=null;
         try
         {
-            sqlSession= neoSqlSessionFactory.getSqlSession();
+            sqlSession= neoSqlSessionFactory.getSqlSession(true);
             feedMapper feedMapper=sqlSession.getMapper(feedMapper.class);
             List<Feed> feedList=feedMapper.selectFeedAll();
             sqlSession.commit();
@@ -44,7 +44,8 @@ public class dbFeedGet
         SqlSession sqlSession=null;
         try
         {
-            sqlSession= neoSqlSessionFactory.getSqlSession();
+            // 使用自动提交事务的SqlSession，适合查询操作
+            sqlSession= neoSqlSessionFactory.getSqlSession(true);
             feedMapper feedMapper=sqlSession.getMapper(feedMapper.class);
             Feed feed=feedMapper.selectFeedByUrl(url);
             return feed;

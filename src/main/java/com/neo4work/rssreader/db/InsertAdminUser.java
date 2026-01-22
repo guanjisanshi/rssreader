@@ -8,7 +8,7 @@ public class InsertAdminUser {
     public static void main(String[] args) {
         SqlSession sqlSession = null;
         try {
-            sqlSession = neoSqlSessionFactory.getSqlSession();
+            sqlSession = neoSqlSessionFactory.getSqlSession(true);
             userMapper userMapper = sqlSession.getMapper(userMapper.class);
             
             // 检查admin用户是否已经存在

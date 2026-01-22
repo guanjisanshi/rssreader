@@ -17,7 +17,7 @@ public class dbItemCommit
         SqlSession sqlSession=null;
         try
         {
-            sqlSession= neoSqlSessionFactory.getSqlSession();
+            sqlSession= neoSqlSessionFactory.getSqlSession(true);
             itemMapper itemMapper=sqlSession.getMapper(itemMapper.class);
             int count=itemMapper.batchInsertItem(items);
             sqlSession.commit();

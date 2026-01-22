@@ -137,7 +137,7 @@ public class RSS
         return map;
     }
 
-    public static void parseXML(String url,String result,String type)
+    public static int parseXML(String url,String result,String type)
     {
         Map <String,String> map;
         List<Item> ItemList=new ArrayList<>();
@@ -174,6 +174,7 @@ public class RSS
                     }
                     int resultcode= dbItemCommit.doCommit(ItemList);
                     System.out.println(resultcode);
+                    return resultcode;
                 }
             }
             if("description".equals(type))
@@ -181,6 +182,7 @@ public class RSS
                 Feed feed=new Feed(title,url);
                 int resultcode= dbFeedCommit.doCommit(feed);
                 System.out.println(resultcode);
+                return resultcode;
             }
 
 
@@ -189,6 +191,6 @@ public class RSS
         {
             log.error(e);
         }
-
+        return -1;
     }
 }

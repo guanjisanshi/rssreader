@@ -15,7 +15,7 @@ public class dbItemGet {
     public static List<Item> doGetByItemUrl(String item_url) {
         SqlSession sqlSession = null;
         try {
-            sqlSession = neoSqlSessionFactory.getSqlSession();
+            sqlSession = neoSqlSessionFactory.getSqlSession(true);
             itemMapper itemMapper = sqlSession.getMapper(itemMapper.class);
             List<Item> itemList = itemMapper.selectItemsByItemUrl(item_url);
             return itemList;

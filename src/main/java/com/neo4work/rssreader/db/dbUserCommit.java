@@ -13,7 +13,7 @@ public class dbUserCommit {
     public static int doCommit(User user) {
         SqlSession sqlSession = null;
         try {
-            sqlSession = neoSqlSessionFactory.getSqlSession();
+            sqlSession = neoSqlSessionFactory.getSqlSession(true);
             userMapper userMapper = sqlSession.getMapper(userMapper.class);
             int count = userMapper.insertUser(user);
             sqlSession.commit();

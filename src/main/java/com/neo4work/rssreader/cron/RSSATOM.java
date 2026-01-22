@@ -135,7 +135,7 @@ public class RSSATOM
         return map;
     }
 
-    public static void parseXML(String url, String result, String type)
+    public static int parseXML(String url, String result, String type)
     {
         Map<String, String> map;
         List<Item> ItemList = new ArrayList<>();
@@ -171,14 +171,16 @@ public class RSSATOM
                         ItemList.add(Item);
                     }
                     int resultcode = dbItemCommit.doCommit(ItemList);
-                    System.out.println(resultcode);
+                    //System.out.println(resultcode);
+                    return resultcode;
                 }
             }
             if ("description".equals(type))
             {
                 Feed feed = new Feed(title, url);
                 int resultcode = dbFeedCommit.doCommit(feed);
-                System.out.println(resultcode);
+                //System.out.println(resultcode);
+                return resultcode;
             }
 
 
@@ -186,6 +188,6 @@ public class RSSATOM
         {
             log.error(e);
         }
-
+        return -1;
     }
 }

@@ -15,7 +15,7 @@ public class dbFeedCommit
         SqlSession sqlSession=null;
         try
         {
-            sqlSession= neoSqlSessionFactory.getSqlSession();
+            sqlSession= neoSqlSessionFactory.getSqlSession(true);
             feedMapper feedMapper=sqlSession.getMapper(feedMapper.class);
             int count=feedMapper.insertFeed(feed);
             sqlSession.commit();
@@ -47,7 +47,7 @@ public class dbFeedCommit
         SqlSession sqlSession=null;
         try
         {
-            sqlSession= neoSqlSessionFactory.getSqlSession();
+            sqlSession= neoSqlSessionFactory.getSqlSession(true);
             feedMapper feedMapper=sqlSession.getMapper(feedMapper.class);
             int count=feedMapper.deleteFeedByUrl(url);
             sqlSession.commit();
