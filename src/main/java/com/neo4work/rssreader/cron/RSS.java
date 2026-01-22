@@ -38,7 +38,7 @@ public class RSS
                 doc=DocumentHelper.parseText(content);
                 rootName=doc.getRootElement().getName();
                 List<Namespace> namespaceList=doc.getRootElement().declaredNamespaces();
-                if(namespaceList.size()>0)
+                if(!namespaceList.isEmpty())
                 {
                     for(Namespace namespace :namespaceList)
                     {
@@ -62,7 +62,7 @@ public class RSS
         return false;
     }
 
-    private Map<String, String> feedProperties(String url, String type)
+    private Map<String, String> feedProperties(String url)
     {
         //TODO
         String host;
@@ -96,11 +96,7 @@ public class RSS
                     map.put("link", link);
 
                 }
-                catch (IOException e)
-                {
-                    log.error(e);
-                }
-                catch (URISyntaxException e)
+                catch (IOException | URISyntaxException e)
                 {
                     log.error(e);
                 }
@@ -111,12 +107,10 @@ public class RSS
 
         Map<String, String> map = new HashMap<>();
 
-        String filename = null;
+        String filename ;
         Properties prop = new Properties();
-        if (type.equals("rss"))
-        {
-            filename = "defaultrss.properties";
-        }
+
+        filename = "defaultrss.properties";
 
         try (InputStream input = Files.newInputStream(Paths.get(ClassLoader.getSystemResource(filename).toURI())))
         {
@@ -136,10 +130,7 @@ public class RSS
             String link = prop.getProperty("link");
             map.put("link", link);
 
-        } catch (IOException e)
-        {
-            log.error(e);
-        } catch (URISyntaxException e)
+        } catch (IOException | URISyntaxException e)
         {
             log.error(e);
         }
@@ -150,7 +141,7 @@ public class RSS
     {
         Map <String,String> map;
         List<Item> ItemList=new ArrayList<>();
-        map=new RSS().feedProperties(url,"rss");
+        map=new RSS().feedProperties(url);
         Document doc;
         try
         {

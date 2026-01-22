@@ -16,26 +16,27 @@ public class PropFiles
     {
         List<File> propertiesFiles = new ArrayList<>();
         List<String> propertiesFileString=new ArrayList<>();
-        try {
+        try
+        {
             // 获取resources目录的URL
             URL resourcesUrl = PropFiles.class.getClassLoader().getResource("");
             if (resourcesUrl == null) {
                 log.error("无法获取resources目录");
-                return null;
+                return new ArrayList<>();
             }
 
             // 创建File对象
             File resourcesDir = new File(resourcesUrl.getFile());
             if (!resourcesDir.exists() || !resourcesDir.isDirectory()) {
                 log.error("resources目录不存在或不是目录");
-                return null;
+                return new ArrayList<>();
             }
 
             // 获取目录下的所有文件
             File[] files = resourcesDir.listFiles();
             if (files == null) {
                 log.error("无法获取resources目录下的文件列表");
-                return null;
+                return new ArrayList<>();
             }
 
             // 筛选出properties文件
@@ -59,7 +60,7 @@ public class PropFiles
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("获取资源目录失败");
         }
         return propertiesFileString;
     }

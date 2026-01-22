@@ -39,7 +39,7 @@ public class RSSATOM
                 doc = DocumentHelper.parseText(content);
                 rootName = doc.getRootElement().getName();
                 List<Namespace> namespaceList=doc.getRootElement().declaredNamespaces();
-                if(namespaceList.size()>0&&("rss".equals(rootName) || "RSS".equals(rootName)))
+                if(!namespaceList.isEmpty()&&("rss".equals(rootName) || "RSS".equals(rootName)))
                 {
                     for(Namespace namespace :namespaceList)
                     {
@@ -60,7 +60,7 @@ public class RSSATOM
         return false;
     }
 
-    private Map<String, String> feedProperties(String url, String type)
+    private Map<String, String> feedProperties(String url)
     {
         //TODO
         String host;
@@ -95,11 +95,7 @@ public class RSSATOM
                     map.put("link",link);
 
                 }
-                catch (IOException e)
-                {
-                    log.error(e);
-                }
-                catch (URISyntaxException e)
+                catch (IOException | URISyntaxException e)
                 {
                     log.error(e);
                 }
@@ -109,12 +105,10 @@ public class RSSATOM
 
         Map<String, String> map = new HashMap<>();
 
-        String filename = null;
+        String filename ;
         Properties prop = new Properties();
-        if (type.equals("rss"))
-        {
-            filename = "defaultrssatom.properties";
-        }
+
+        filename = "defaultrssatom.properties";
 
         try (InputStream input = Files.newInputStream(Paths.get(ClassLoader.getSystemResource(filename).toURI())))
         {
@@ -134,10 +128,7 @@ public class RSSATOM
             String link = prop.getProperty("link");
             map.put("link", link);
 
-        } catch (IOException e)
-        {
-            log.error(e);
-        } catch (URISyntaxException e)
+        } catch (IOException | URISyntaxException e)
         {
             log.error(e);
         }
@@ -148,7 +139,7 @@ public class RSSATOM
     {
         Map<String, String> map;
         List<Item> ItemList = new ArrayList<>();
-        map = new RSSATOM().feedProperties(url, "rss");
+        map = new RSSATOM().feedProperties(url);
         Document doc;
         try
         {

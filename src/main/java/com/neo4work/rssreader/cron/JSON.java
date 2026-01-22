@@ -1,6 +1,5 @@
 package com.neo4work.rssreader.cron;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -27,7 +26,7 @@ public class JSON
 
         return com.alibaba.fastjson2.JSON.isValid(content);
     }
-    private Map<String, String> feedProperties(String url, String type)
+    private Map<String, String> feedProperties(String url)
     {
         //TODO
         String host ;
@@ -61,11 +60,7 @@ public class JSON
                     map.put("link", link);
 
                 }
-                catch (IOException e)
-                {
-                    log.error(e);
-                }
-                catch (URISyntaxException e)
+                catch (IOException | URISyntaxException e)
                 {
                     log.error(e);
                 }
@@ -75,13 +70,10 @@ public class JSON
         }
         Map<String, String> map = new HashMap<>();
 
-        String filename=null;
+        String filename;
         Properties prop = new Properties();
 
-        if(type.equals("json"))
-        {
-            filename="defaultjson.properties";
-        }
+        filename="defaultjson.properties";
 
         try(InputStream input = Files.newInputStream(Paths.get(ClassLoader.getSystemResource(filename).toURI())))
         {
@@ -102,11 +94,7 @@ public class JSON
             map.put("link",link);
 
         }
-        catch (IOException e)
-        {
-            log.error(e);
-        }
-        catch (URISyntaxException e)
+        catch (IOException | URISyntaxException e)
         {
             log.error(e);
         }
@@ -114,9 +102,9 @@ public class JSON
     }
     public static void parseJSON(String url,String result,String type)
     {
-        Map <String,String> map=new HashMap<>();
+        Map <String,String> map;
         List<Item> ItemList=new ArrayList<>();
-        map=new JSON().feedProperties(url,"json");
+        map=new JSON().feedProperties(url);
         try
         {
             JSONObject JOB= com.alibaba.fastjson2.JSON.parseObject(result);
@@ -144,7 +132,7 @@ public class JSON
                             &&subtitleList.size()==pubTimeList.size()
                             &&pubTimeList.size()==contentList.size()
                             &&contentList.size()==linkList.size()
-                            &&itemList.size()!=0)
+                            &&!itemList.isEmpty())
                     {
                         for(int i=0;i<itemList.size();i++)
                         {

@@ -43,7 +43,7 @@ public class ATOM
         }
         return false;
     }
-    private Map<String, String> feedProperties(String url, String type)
+    private Map<String, String> feedProperties(String url)
     {
         //TODO
         String host;
@@ -56,6 +56,7 @@ public class ATOM
             Properties prop = new Properties();
 
             propFileList = PropFiles.getPropFiles();
+
             if (!propFileList.isEmpty() && propFileList.contains(host + "atom.properties"))
             {
                 try (InputStream input = Files.newInputStream(Paths.get(ClassLoader.getSystemResource(host + "atom.properties").toURI())))
@@ -77,11 +78,7 @@ public class ATOM
                     map.put("link", link);
 
                 }
-                catch (IOException e)
-                {
-                    log.error(e);
-                }
-                catch (URISyntaxException e)
+                catch (IOException | URISyntaxException e)
                 {
                     log.error(e);
                 }
@@ -91,13 +88,10 @@ public class ATOM
         }
         Map<String, String> map = new HashMap<>();
 
-        String filename=null;
+        String filename;
         Properties prop = new Properties();
+        filename="defaultatom.properties";
 
-        if(type.equals("atom"))
-        {
-            filename="defaultatom.properties";
-        }
         try(InputStream input = Files.newInputStream(Paths.get(ClassLoader.getSystemResource(filename).toURI())))
         {
             prop.load(input);
@@ -119,11 +113,7 @@ public class ATOM
             map.put("link",link);
 
         }
-        catch (IOException e)
-        {
-            log.error(e);
-        }
-        catch (URISyntaxException e)
+        catch (IOException | URISyntaxException e)
         {
             log.error(e);
         }
@@ -131,11 +121,11 @@ public class ATOM
     }
     public static void parseXML(String url,String result,String type)
     {
-        Map <String,String> map=new HashMap<>();
+        Map <String,String> map;
         List<Item> ItemList=new ArrayList<>();
 
-        map=new ATOM().feedProperties(url,"atom");
-        Document doc=null;
+        map=new ATOM().feedProperties(url);
+        Document doc;
         try
         {
             doc= DocumentHelper.parseText(result);
@@ -173,7 +163,7 @@ public class ATOM
                         &&subtitleList.size() == pubtimeList.size()
                         &&pubtimeList.size()==contentList.size()
                         && contentList.size() == linkList.size()
-                        &&itemList.size()!=0)
+                        &&!itemList.isEmpty())
                 {
                     for(int i=0;i<itemList.size();i++)
                     {
@@ -205,7 +195,6 @@ public class ATOM
         }
         catch (Exception e)
         {
-            e.printStackTrace();
             log.error(e);
         }
 
