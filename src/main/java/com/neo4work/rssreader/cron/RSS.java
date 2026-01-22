@@ -145,13 +145,38 @@ public class RSS
         Document doc;
         try
         {
-            doc= DocumentHelper.parseText(result);
-            String title=doc.selectSingleNode(map.get("title")).getText();
-            List<Node> itemList=doc.selectNodes(map.get("item"));
+            doc = DocumentHelper.parseText(result);
+            String title = doc.selectSingleNode(map.get("title")).getText();
+            List<Node> itemList = doc.selectNodes(map.get("item"));
 
-            List<Node> subtitleList=doc.selectNodes(map.get("subtitle"));
-            List<Node> pubtimeList=doc.selectNodes(map.get("pubTime"));
-            List<Node> contentList=doc.selectNodes(map.get("content"));
+            List<Node> subtitleList = doc.selectNodes(map.get("subtitle"));
+            List<Node> pubtimeList = doc.selectNodes(map.get("pubTime"));
+            //TODO
+            List<Node> contentList=new ArrayList<>();
+            List<Node> descriptionList=new ArrayList<>();
+            if (map.get("content").contains(","))
+            {
+                String[] xpathcontent=map.get("content").split(",");
+                for(int i=0;i<xpathcontent.length;i++)
+                {
+
+                    if(xpathcontent[i].contains("content"))
+                    {
+                        contentList=doc.selectNodes(xpathcontent[i]);
+                    }
+                    if(xpathcontent[i].contains("description"))
+                    {
+                        descriptionList=doc.selectNodes(xpathcontent[i]);
+                    }
+                    if(contentList.size()!=descriptionList.size())
+                    {
+                        contentList=descriptionList;
+                    }
+
+                }
+            }
+            //List<Node> contentList=doc.selectNodes(map.get("content"));
+
             List<Node> linkList=doc.selectNodes(map.get("link"));
             if("content".equals(type))
             {
