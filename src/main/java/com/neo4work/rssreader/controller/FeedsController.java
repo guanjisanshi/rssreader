@@ -21,6 +21,11 @@ public class FeedsController {
     public ResponseEntity<List<?>> getAllFeeds(@RequestParam(required = false) String userIdCode) {
         List<Feed> feeds = dbFeedGet.doGet();
         
+        // 处理feeds为null的情况
+        if (feeds == null) {
+            feeds = java.util.Collections.emptyList();
+        }
+        
         if (userIdCode != null) {
             // 如果提供了userIdCode，创建包含Feed信息和未读数量的新对象列表
             java.util.List<java.util.Map<String, Object>> feedsWithUnreadCount = new java.util.ArrayList<>();
@@ -58,6 +63,11 @@ public class FeedsController {
     @GetMapping("/items")
     public ResponseEntity<List<?>> getFeedItems(@RequestParam String item_url, @RequestParam(required = false) String userIdCode) {
         List<Item> items = dbItemGet.doGetByItemUrl(item_url);
+        
+        // 处理items为null的情况
+        if (items == null) {
+            items = java.util.Collections.emptyList();
+        }
         
         // 检查数据库中是否存在isread表
         if (userIdCode != null) {
@@ -104,6 +114,7 @@ public class FeedsController {
                 return ResponseEntity.status(500).body(null);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(500).body(null);
         }
     }

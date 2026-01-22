@@ -28,7 +28,7 @@ public class RSSType
     public static boolean isRSS(String content)
     {
 
-        if(isXML.isXML(content))
+        if(XML.isXML(content))
         {
             Document doc = null;
             String rootName = null;

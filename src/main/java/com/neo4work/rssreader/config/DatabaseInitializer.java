@@ -13,6 +13,14 @@ public class DatabaseInitializer implements CommandLineRunner {
         try {
             sqlSession = neoSqlSessionFactory.getSqlSession();
             
+            // 创建feed表
+            String createFeedTable = "CREATE TABLE IF NOT EXISTS feed (id INTEGER PRIMARY KEY AUTOINCREMENT, title VARCHAR(255) NOT NULL, url VARCHAR(255) NOT NULL UNIQUE)";
+            sqlSession.getConnection().createStatement().execute(createFeedTable);
+            
+            // 创建item表
+            String createItemTable = "CREATE TABLE IF NOT EXISTS item (id INTEGER PRIMARY KEY AUTOINCREMENT, item_url VARCHAR(255) NOT NULL, title VARCHAR(255), subtitle VARCHAR(255), link VARCHAR(255) NOT NULL, pubDate VARCHAR(50), content TEXT)";
+            sqlSession.getConnection().createStatement().execute(createItemTable);
+            
             // 创建user表
             String createUserTable = "CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY AUTOINCREMENT, username VARCHAR(50) NOT NULL UNIQUE, password VARCHAR(50) NOT NULL, userIdCode VARCHAR(100) NOT NULL UNIQUE)";
             sqlSession.getConnection().createStatement().execute(createUserTable);

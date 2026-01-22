@@ -28,7 +28,7 @@ public class RSSATOMType
     public static boolean isRSSATOM(String content)
     {
 
-        if (isXML.isXML(content))
+        if (XML.isXML(content))
         {
             Document doc = null;
             String rootName = null;

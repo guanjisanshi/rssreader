@@ -24,14 +24,19 @@ public class dbFeedCommit
         catch(Exception e)
         {
             sqlSession.rollback();
-            log.error(e);
+            log.error("添加RSS源失败", e);
+            e.printStackTrace();
             return -1;
         }
         finally
         {
             if(sqlSession!=null)
             {
-                sqlSession.close();
+                try {
+                    sqlSession.close();
+                } catch (Exception closeEx) {
+                    log.error("关闭SqlSession失败", closeEx);
+                }
             }
         }
     }

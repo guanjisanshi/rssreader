@@ -19,14 +19,17 @@
             </dataSource>
         </environment>
         <environment id="sqlite">
-            <transactionManager type="JDBC"/>
-            <dataSource type="POOLED">
-                <property name="driver" value="org.sqlite.JDBC"/>
-                <property name="url" value="jdbc:sqlite:rss.db"/>
-                <property name="username" value=""/>
-                <property name="password" value=""/>
-            </dataSource>
-        </environment>
+                <transactionManager type="JDBC"/>
+                <dataSource type="POOLED">
+                    <property name="driver" value="org.sqlite.JDBC"/>
+                    <property name="url" value="jdbc:sqlite:./rss.db"/>
+                    <property name="username" value=""/>
+                    <property name="password" value=""/>
+                    <property name="poolMaximumActiveConnections" value="5"/>
+                    <property name="poolMaximumIdleConnections" value="1"/>
+                    <property name="poolMaximumCheckoutTime" value="20000"/>
+                </dataSource>
+            </environment>
     </environments>
     <mappers>
         <!--
